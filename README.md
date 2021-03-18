@@ -2,4 +2,4 @@
 
 Instalar los modulos de node 
 
-```npn install```
+```npm install```
