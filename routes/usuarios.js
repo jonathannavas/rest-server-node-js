@@ -18,7 +18,6 @@ router.put('/:id', [
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     check('rol').custom( esRoleValido ),
-
     validarCampos
 
 ] , usuariosPut);
@@ -30,14 +29,19 @@ router.post('/', [
     check('correo', 'El correo no es válido!').isEmail(),
     check('correo').custom( validarCorreoExiste ),
     check('rol').custom( esRoleValido ),
-
-    validarCampos,
+    validarCampos
     
 ] ,usuariosPost);
 
 router.patch('/', usuariosPatch);
 
-router.delete('/', usuariosDelete); 
+router.delete('/:id', [
+    
+    check('id', 'No es un ID valido').isMongoId(),
+    check('id').custom( existeUsuarioPorId ),
+    validarCampos
+
+],usuariosDelete); 
 
 module.exports = router;
 
