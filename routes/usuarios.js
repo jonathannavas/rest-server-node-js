@@ -1,12 +1,9 @@
 
-
 const {Router} = require('express');
 const { check } = require('express-validator');
 
-
 const { usuariosGet, usuariosPost, usuariosPut, usuariosPatch, usuariosDelete } = require('../controllers/usuarios');
-
-const { validarCampos } =  require('../middlewares/validar-campos');
+const { validarCampos, validarJWT, esAdminRole, tieneRole } = require('../middlewares/index');
 const { esRoleValido, validarCorreoExiste, existeUsuarioPorId } = require('../helpers/db-validators');
 
 const router = new Router();
@@ -37,6 +34,11 @@ router.patch('/', usuariosPatch);
 
 router.delete('/:id', [
     
+    validarJWT,
+    // Este middleware controla a fuerza que el usuario que solicita algun proceso sea del rol permitido
+    // esAdminRole,
+    //Este otro middleware es mas flexible que el anterior
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     validarCampos
