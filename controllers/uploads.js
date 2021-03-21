@@ -199,9 +199,59 @@ const actualizarImagenCloudinary = async (req, res = response) => {
 
 }
 
+const mostrarImagenCloudinary = async (req,res = response) => {
+
+
+    const {id, coleccion} = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+        case 'usuarios':
+            
+            modelo = await Usuario.findById(id);
+
+            if(!modelo){
+                return res.status(400).json({
+                    msg: `No existe un usuario con el id:  ${ id }`
+                });
+            }
+
+        break;
+
+        case 'productos':
+            modelo = await Producto.findById(id);
+
+            if(!modelo){
+                return res.status(400).json({
+                    msg: `No existe un producto con el id:  ${ id }`
+                });
+            }
+        break;
+        default:
+            res.status(500).json({
+                msg: 'Se me olvido validar esto'
+            })
+        break;
+    }
+
+    //Limpiar imagenes Previas
+
+    if( modelo.img ){
+        return res.json({
+            img: modelo.img
+        });
+    }
+
+    const noImg = path.join(__dirname, '../assets/','no-image.jpg');
+    res.sendFile( noImg );
+}
+
+
 module.exports = {
     cargarArchivo,
     actualizarImagen,
     mostrarImagen,
-    actualizarImagenCloudinary
+    actualizarImagenCloudinary,
+    mostrarImagenCloudinary
 }
