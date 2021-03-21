@@ -118,6 +118,7 @@ const buscar = (req, res = response) => {
     }
 
     switch (coleccion) {
+        
         case 'usuarios':
             buscarUsuarios(termino, res);
             break;
